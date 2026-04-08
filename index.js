@@ -144,6 +144,17 @@ app.get('/accounts/:uuid', async (req, res) => {
   }
 });
 
+// IP discovery - hit this to find Railway's outbound IP for whitelisting
+app.get('/my-ip', async (req, res) => {
+  try {
+    const r = await fetch('https://api.ipify.org?format=json');
+    const data = await r.json();
+    res.json({ outbound_ip: data.ip, note: 'Use this IP in Coinbase whitelist' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/', (req, res) => {
   res.json({
     status: 'ok',
